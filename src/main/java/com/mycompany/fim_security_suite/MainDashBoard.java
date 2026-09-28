@@ -38,7 +38,6 @@ public class MainDashBoard extends javax.swing.JFrame {
         FIMlogo = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         alertsButton = new javax.swing.JButton();
-        fileGroupButton = new javax.swing.JButton();
         DashboardButton = new javax.swing.JButton();
         actionPanel = new javax.swing.JPanel();
         SystemStatusPanel = new javax.swing.JPanel();
@@ -83,6 +82,8 @@ public class MainDashBoard extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         backGroundPanel.setBackground(new java.awt.Color(9, 13, 18));
+        backGroundPanel.setMinimumSize(new java.awt.Dimension(1200, 750));
+        backGroundPanel.setPreferredSize(new java.awt.Dimension(1200, 750));
 
         headerPanel.setBackground(new java.awt.Color(38, 52, 69));
 
@@ -102,11 +103,13 @@ public class MainDashBoard extends javax.swing.JFrame {
             }
         });
 
-        fileGroupButton.setBackground(new java.awt.Color(0, 153, 153));
-        fileGroupButton.setText("File Group");
-
         DashboardButton.setBackground(new java.awt.Color(0, 153, 153));
         DashboardButton.setText("Dashboard");
+        DashboardButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DashboardButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout headerPanelLayout = new javax.swing.GroupLayout(headerPanel);
         headerPanel.setLayout(headerPanelLayout);
@@ -119,23 +122,25 @@ public class MainDashBoard extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(DashboardButton)
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(alertsButton)
-                .addGap(26, 26, 26)
-                .addComponent(fileGroupButton)
-                .addGap(137, 137, 137))
+                .addContainerGap())
         );
         headerPanelLayout.setVerticalGroup(
             headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(headerPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(FIMlogo, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(alertsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fileGroupButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(DashboardButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(headerPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(FIMlogo, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(headerPanelLayout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(alertsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(DashboardButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         actionPanel.setBackground(new java.awt.Color(9, 13, 18));
@@ -262,15 +267,15 @@ public class MainDashBoard extends javax.swing.JFrame {
         actionPanelLayout.setHorizontalGroup(
             actionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(actionPanelLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addGap(38, 38, 38)
                 .addComponent(SystemStatusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
                 .addComponent(MonitoredFilesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53)
+                .addGap(73, 73, 73)
                 .addComponent(alertsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49)
+                .addGap(81, 81, 81)
                 .addComponent(LastScanPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(24, 24, 24))
         );
         actionPanelLayout.setVerticalGroup(
             actionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -288,6 +293,7 @@ public class MainDashBoard extends javax.swing.JFrame {
 
         jBSelectFolder.setBackground(new java.awt.Color(30, 41, 59));
         jBSelectFolder.setForeground(new java.awt.Color(243, 244, 246));
+        jBSelectFolder.setIcon(new javax.swing.ImageIcon("C:\\Users\\sandi\\OneDrive\\Documents\\SDN(260s)Project\\folder_21dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png")); // NOI18N
         jBSelectFolder.setText("Select folder");
         jBSelectFolder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -296,14 +302,17 @@ public class MainDashBoard extends javax.swing.JFrame {
         });
 
         jLcreateBaseLine.setBackground(new java.awt.Color(0, 153, 153));
+        jLcreateBaseLine.setIcon(new javax.swing.ImageIcon("C:\\Users\\sandi\\OneDrive\\Documents\\SDN(260s)Project\\fingerprint_21dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png")); // NOI18N
         jLcreateBaseLine.setText("Create baseline");
 
         jLRunCheck.setBackground(new java.awt.Color(30, 41, 59));
         jLRunCheck.setForeground(new java.awt.Color(243, 244, 246));
+        jLRunCheck.setIcon(new javax.swing.ImageIcon("C:\\Users\\sandi\\OneDrive\\Documents\\SDN(260s)Project\\refresh_21dp_E3E3E3_FILL0_wght400_GRAD0_opsz20 (1).png")); // NOI18N
         jLRunCheck.setText("Run check");
 
         jLStartMonitoring.setBackground(new java.awt.Color(30, 41, 59));
         jLStartMonitoring.setForeground(new java.awt.Color(243, 244, 246));
+        jLStartMonitoring.setIcon(new javax.swing.ImageIcon("C:\\Users\\sandi\\OneDrive\\Documents\\SDN(260s)Project\\play_arrow_21dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png")); // NOI18N
         jLStartMonitoring.setText("Start monitoring");
         jLStartMonitoring.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -313,6 +322,7 @@ public class MainDashBoard extends javax.swing.JFrame {
 
         JLViewLog.setBackground(new java.awt.Color(30, 41, 59));
         JLViewLog.setForeground(new java.awt.Color(243, 244, 246));
+        JLViewLog.setIcon(new javax.swing.ImageIcon("C:\\Users\\sandi\\OneDrive\\Documents\\SDN(260s)Project\\file_open_21dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png")); // NOI18N
         JLViewLog.setText("View log");
 
         FileStatusBreakDown.setBackground(new java.awt.Color(38, 52, 69));
@@ -450,22 +460,23 @@ public class MainDashBoard extends javax.swing.JFrame {
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buttonPanelLayout.createSequentialGroup()
                 .addGap(42, 42, 42)
-                .addComponent(jBSelectFolder)
-                .addGap(55, 55, 55)
-                .addComponent(jLcreateBaseLine)
-                .addGap(66, 66, 66)
-                .addComponent(jLRunCheck)
-                .addGap(65, 65, 65)
-                .addComponent(jLStartMonitoring)
-                .addGap(58, 58, 58)
-                .addComponent(JLViewLog)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(buttonPanelLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(FileStatusBreakDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(RecentActivityPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(92, 92, 92))
+                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(buttonPanelLayout.createSequentialGroup()
+                        .addComponent(FileStatusBreakDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(RecentActivityPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))
+                    .addGroup(buttonPanelLayout.createSequentialGroup()
+                        .addComponent(jBSelectFolder)
+                        .addGap(55, 55, 55)
+                        .addComponent(jLcreateBaseLine)
+                        .addGap(66, 66, 66)
+                        .addComponent(jLRunCheck)
+                        .addGap(65, 65, 65)
+                        .addComponent(jLStartMonitoring)
+                        .addGap(58, 58, 58)
+                        .addComponent(JLViewLog)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         buttonPanelLayout.setVerticalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -508,27 +519,27 @@ public class MainDashBoard extends javax.swing.JFrame {
                 .addGroup(backGroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(actionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(backGroundPanelLayout.createSequentialGroup()
                         .addGap(1139, 1139, 1139)
-                        .addComponent(dataPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(97, 97, 97))
+                        .addComponent(dataPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         backGroundPanelLayout.setVerticalGroup(
             backGroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(backGroundPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49)
+                .addGap(45, 45, 45)
                 .addComponent(actionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50)
                 .addComponent(dataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(backGroundPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1270, 790));
+        getContentPane().add(backGroundPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1360, 790));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -558,8 +569,22 @@ public class MainDashBoard extends javax.swing.JFrame {
     }//GEN-LAST:event_jBSelectFolderActionPerformed
 
     private void alertsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alertsButtonActionPerformed
-        // TODO add your handling code here:
+         // 1. Create the new Alerts page instance
+    AlertFramePage alertWindow = new AlertFramePage();
+    
+    // 2. Open it in the exact same desktop position as this current window
+    alertWindow.setLocationRelativeTo(this);
+    
+    // 3. Make the Alerts page visible
+    alertWindow.setVisible(true);
+    
+    // 4. Close this Dashboard window completely so it disappears underneath
+    this.dispose();
     }//GEN-LAST:event_alertsButtonActionPerformed
+
+    private void DashboardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DashboardButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DashboardButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -609,7 +634,6 @@ public class MainDashBoard extends javax.swing.JFrame {
     private javax.swing.JPanel backGroundPanel;
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JPanel dataPanel;
-    private javax.swing.JButton fileGroupButton;
     private javax.swing.JPanel headerPanel;
     private javax.swing.JButton jBSelectFolder;
     private javax.swing.JLabel jLAlerts;
