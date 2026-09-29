@@ -1,18 +1,6 @@
 
 package com.mycompany.fim_security_suite;
 
-
-
-
-
-
-
-/**
- *
- * @author sandi
- */
-
-
 public class MainDashBoard extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainDashBoard.class.getName());
@@ -122,9 +110,9 @@ public class MainDashBoard extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(DashboardButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(alertsButton)
-                .addContainerGap())
+                .addGap(72, 72, 72))
         );
         headerPanelLayout.setVerticalGroup(
             headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -293,7 +281,7 @@ public class MainDashBoard extends javax.swing.JFrame {
 
         jBSelectFolder.setBackground(new java.awt.Color(30, 41, 59));
         jBSelectFolder.setForeground(new java.awt.Color(243, 244, 246));
-        jBSelectFolder.setIcon(new javax.swing.ImageIcon("C:\\Users\\sandi\\OneDrive\\Documents\\SDN(260s)Project\\folder_21dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png")); // NOI18N
+        jBSelectFolder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/fim_security_suite/icons/folder_21dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png"))); // NOI18N
         jBSelectFolder.setText("Select folder");
         jBSelectFolder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -302,17 +290,17 @@ public class MainDashBoard extends javax.swing.JFrame {
         });
 
         jLcreateBaseLine.setBackground(new java.awt.Color(0, 153, 153));
-        jLcreateBaseLine.setIcon(new javax.swing.ImageIcon("C:\\Users\\sandi\\OneDrive\\Documents\\SDN(260s)Project\\fingerprint_21dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png")); // NOI18N
+        jLcreateBaseLine.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/fim_security_suite/icons/fingerprint_21dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png"))); // NOI18N
         jLcreateBaseLine.setText("Create baseline");
 
         jLRunCheck.setBackground(new java.awt.Color(30, 41, 59));
         jLRunCheck.setForeground(new java.awt.Color(243, 244, 246));
-        jLRunCheck.setIcon(new javax.swing.ImageIcon("C:\\Users\\sandi\\OneDrive\\Documents\\SDN(260s)Project\\refresh_21dp_E3E3E3_FILL0_wght400_GRAD0_opsz20 (1).png")); // NOI18N
+        jLRunCheck.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/fim_security_suite/icons/refresh_21dp_E3E3E3_FILL0_wght400_GRAD0_opsz20 (1).png"))); // NOI18N
         jLRunCheck.setText("Run check");
 
         jLStartMonitoring.setBackground(new java.awt.Color(30, 41, 59));
         jLStartMonitoring.setForeground(new java.awt.Color(243, 244, 246));
-        jLStartMonitoring.setIcon(new javax.swing.ImageIcon("C:\\Users\\sandi\\OneDrive\\Documents\\SDN(260s)Project\\play_arrow_21dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png")); // NOI18N
+        jLStartMonitoring.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/fim_security_suite/icons/play_arrow_21dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png"))); // NOI18N
         jLStartMonitoring.setText("Start monitoring");
         jLStartMonitoring.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -322,7 +310,7 @@ public class MainDashBoard extends javax.swing.JFrame {
 
         JLViewLog.setBackground(new java.awt.Color(30, 41, 59));
         JLViewLog.setForeground(new java.awt.Color(243, 244, 246));
-        JLViewLog.setIcon(new javax.swing.ImageIcon("C:\\Users\\sandi\\OneDrive\\Documents\\SDN(260s)Project\\file_open_21dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png")); // NOI18N
+        JLViewLog.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/fim_security_suite/icons/file_open_21dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png"))); // NOI18N
         JLViewLog.setText("View log");
 
         FileStatusBreakDown.setBackground(new java.awt.Color(38, 52, 69));
