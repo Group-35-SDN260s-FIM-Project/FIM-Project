@@ -1,7 +1,6 @@
 package my.fim_security_suite.core;
 
 import my.fim_security_suite.model.Baseline;
-import com.mycompany.fim_security_suit.model.FileRecord;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Map;
+import my.fim_security_suite.model.FileRecord;
 
 /**
  * Creates, saves and loads Baseline snapshots.

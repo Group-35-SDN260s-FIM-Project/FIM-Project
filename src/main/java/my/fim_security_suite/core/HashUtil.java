@@ -1,4 +1,4 @@
-package my.fim_security_suite.utl;
+package my.fim_security_suite.core;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,3 +41,4 @@ public final class HashUtil {
         return sb.toString();
     }
 }
+

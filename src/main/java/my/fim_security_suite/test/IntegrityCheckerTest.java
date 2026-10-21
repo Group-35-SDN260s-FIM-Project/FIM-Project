@@ -1,9 +1,17 @@
 package my.fim_security_suite.test;
 
-import java.nio.file.Path;
-import java.util.List;
 import java.util.Map;
+import my.fim_security_suite.core.IntegrityChecker;
+import my.fim_security_suite.model.Baseline;
+import my.fim_security_suite.model.FileRecord;
+import my.fim_security_suite.model.FileStatus;
+import my.fim_security_suite.model.ScanResult;
 
+/**
+ * Plain Java tests for IntegrityChecker (no JUnit needed, just run the file).
+ * Each test builds a small fake baseline and scan by hand and checks the
+ * unchanged / modified / new / missing counts.
+ */
 public class IntegrityCheckerTest {
 
     private static int passed;
@@ -94,8 +102,9 @@ public class IntegrityCheckerTest {
         checkCounts("testRenameIsMissingPlusNew", result, 0, 0, 1, 1);
     }
 
+    // FileRecord and Baseline take the path as a String, not a Path
     private static FileRecord rec(String path, String hash) {
-        return new FileRecord(Path.of(path), hash, 0L, 0L);
+        return new FileRecord(path, hash, 0L, 0L);
     }
 
     private static Map<String, FileRecord> scan(FileRecord... records) {
@@ -108,7 +117,7 @@ public class IntegrityCheckerTest {
 
     private static Baseline baseline(FileRecord... records) {
         Map<String, FileRecord> map = scan(records);
-        return new Baseline(Path.of("."), java.time.LocalDateTime.now(), map);
+        return new Baseline(".", java.time.LocalDateTime.now(), map);
     }
 
     private static void checkCounts(String name, ScanResult result, int u, int m, int n, int x) {
