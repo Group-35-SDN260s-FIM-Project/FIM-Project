@@ -65,3 +65,20 @@ The design follows the group UML diagram and is split into packages:
 | Olona Mlanjeni | `BaselineManager`, `Baseline` |
 | Rebecca Mandiadi | `CliMenu`, `ScanResult` |
 | Mixo Rikhotso | `SandboxTool`, `CoreTest` |
+## Combined application (`main-source` + `deadline-code-source`)
+
+This merge preserves both the original Swing GUI (`com.mycompany.fim_security_suite`)
+and the Check-In 2 console implementation (`my.fim_security_suite`). The Java packages
+remain separate, but Maven compiles both under `src/main/java`.
+
+- Normal run in NetBeans launches the original Swing dashboard.
+- Console run: `mvn exec:java -Dexec.args="--cli"` (JDK 24 and Maven required).
+- The original CLI entry point is also available as `my.fim_security_suite.FIM_Security_Suite`.
+- The core tests `my.fim_security_suite.test.CoreTest` and
+  `my.fim_security_suite.test.IntegrityCheckerTest` are plain Java test mains,
+  not standard Maven Surefire/JUnit test suites.
+- Keep `fim_baseline.ser` and `fim_activity.log` outside the monitored folder.
+
+The source branches had unrelated histories. The integration merge commit has both
+branch tips as parents to preserve their provenance. `main` is not automatically
+updated by merging into `main-source`.
