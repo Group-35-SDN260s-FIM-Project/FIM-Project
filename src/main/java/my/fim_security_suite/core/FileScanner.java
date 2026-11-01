@@ -6,20 +6,29 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.regex.Pattern;
 
+/**
+ * Walks through a folder and all its sub folders and makes a FileRecord
+ * for every regular file.
+ * Things we can't or shouldn't read (links, locked files) are not hashed,
+ * they are listed in getSkipped() instead of stopping the scan.
+ */
 public class FileScanner {
 
     private final Pattern ignore;
     private final List<String> skipped = new ArrayList<>();
 
+    /** Scanner that looks at every file. */
     public FileScanner() {
         this(null);
     }
 
+    /** Scanner that leaves out files whose relative path matches the regex (e.g. ".*\\.tmp"). */
     public FileScanner(String ignoreRegex) {
         ignore = (ignoreRegex == null || ignoreRegex.isBlank())
                 ? null : Pattern.compile(ignoreRegex);
     }
 
+    /** Returns relative path -> FileRecord for everything under the folder. */
     public Map<String, FileRecord> scan(Path folder) {
         Objects.requireNonNull(folder, "folder");
 
@@ -37,6 +46,7 @@ public class FileScanner {
         return records;
     }
 
+    /** Goes through one directory and calls itself for every sub folder. */
     private void walk(Path root, Path directory,
                       Map<String, FileRecord> records) {
 
@@ -94,6 +104,7 @@ public class FileScanner {
         }
     }
 
+    /** What the last scan skipped, with the reason. */
     public List<String> getSkipped() {
         return new ArrayList<>(skipped);
     }

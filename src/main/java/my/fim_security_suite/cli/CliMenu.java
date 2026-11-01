@@ -123,8 +123,8 @@ public class CliMenu {
             return;
         }
         java.awt.EventQueue.invokeLater(() -> {
-            com.mycompany.fim_security_suite.MainDashBoard dashboard =
-                    new com.mycompany.fim_security_suite.MainDashBoard(controller);
+            my.fim_security_suite.ui.MainDashBoard dashboard =
+                    new my.fim_security_suite.ui.MainDashBoard(controller);
             dashboard.setLocationRelativeTo(null);
             dashboard.setVisible(true);
         });

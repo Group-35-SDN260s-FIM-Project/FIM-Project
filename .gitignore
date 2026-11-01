@@ -25,3 +25,9 @@ replay_pid*
 
 # Maven build output
 target/
+
+# FIM runtime files and demo folders
+fim_baseline.ser
+fim_activity.log
+sandbox/
+sandbox_original/

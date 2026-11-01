@@ -1,12 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package my.fim_security_suite.model;
 
 import java.io.Serializable;
 
+/**
+ * What we remember about one file: relative path, SHA-256 hash, size
+ * and last modified time. Only the hash is used for the comparison.
+ */
 public class FileRecord implements Serializable {
 
     private static final long serialVersionUID = 1L;

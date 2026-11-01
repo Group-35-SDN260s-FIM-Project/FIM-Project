@@ -28,13 +28,13 @@ git clone https://github.com/Group-35-SDN260s-FIM-Project/FIM-Project.git
 
 1. In NetBeans choose **File → Open Project** and select the cloned folder.
 2. Make sure the project uses JDK 24 (**Project Properties → Build → Compile / Run**).
-3. Run the project (**F6**). The main class is `com.mycompany.fim_security_suite.FIM_Security_Suite`.
+3. Run the project (**F6**). The main class is `my.fim_security_suite.FIM_Security_Suite`. It opens the Swing window; add the argument `--cli` to get the console menu instead.
 
 ## Branches
 
 | Branch | Contents |
 | --- | --- |
-| `main` | Maven project with the Swing GUI (`MainDashBoard`, `AlertFramePage`, `FolderSelectionDialog`) |
+| `main` | Maven project with the Swing GUI (`MainDashBoard`) |
 | `demoFIM` | Console version with the core logic (scanner, hashing, baseline, integrity checker, CLI menu) |
 
 Work is done on personal branches and merged into `main` through pull requests.
@@ -50,6 +50,7 @@ The design follows the group UML diagram and is split into packages:
 | `controller` | `FIMController` |
 | `core` | `FileScanner`, `HashUtil`, `BaselineManager`, `IntegrityChecker`, `ActivityLogger` |
 | `model` | `FileRecord`, `Baseline`, `FileChange`, `FileStatus`, `ScanResult`, `LogEntry` |
+| `ui` | `MainDashBoard` (+ `MainDashBoard.form`) |
 | `demo` | `SandboxTool` |
 | `test` | `CoreTest`, `IntegrityCheckerTest` |
 
@@ -65,20 +66,10 @@ The design follows the group UML diagram and is split into packages:
 | Olona Mlanjeni | `BaselineManager`, `Baseline` |
 | Rebecca Mandiadi | `CliMenu`, `ScanResult` |
 | Mixo Rikhotso | `SandboxTool`, `CoreTest` |
-## Combined application (`main-source` + `deadline-code-source`)
+## Running and testing
 
-This merge preserves both the original Swing GUI (`com.mycompany.fim_security_suite`)
-and the Check-In 2 console implementation (`my.fim_security_suite`). The Java packages
-remain separate, but Maven compiles both under `src/main/java`.
-
-- Normal run in NetBeans launches the original Swing dashboard.
-- Console run: `mvn exec:java -Dexec.args="--cli"` (JDK 24 and Maven required).
-- The original CLI entry point is also available as `my.fim_security_suite.FIM_Security_Suite`.
-- The core tests `my.fim_security_suite.test.CoreTest` and
-  `my.fim_security_suite.test.IntegrityCheckerTest` are plain Java test mains,
-  not standard Maven Surefire/JUnit test suites.
-- Keep `fim_baseline.ser` and `fim_activity.log` outside the monitored folder.
-
-The source branches had unrelated histories. The integration merge commit has both
-branch tips as parents to preserve their provenance. `main` is not automatically
-updated by merging into `main-source`.
+- GUI: run `FIM_Security_Suite` (F6 in NetBeans).
+- Console: run it with the argument `--cli` (or `mvn exec:java -Dexec.args="--cli"`).
+- Demo data: `SandboxTool` with `create`, `tamper` or `reset` makes a throwaway folder to monitor.
+- Tests: `my.fim_security_suite.test.CoreTest` and `my.fim_security_suite.test.IntegrityCheckerTest` are plain Java programs, so run each file and read the PASS/FAIL lines. They are not JUnit tests.
+- Keep `fim_baseline.ser` and `fim_activity.log` outside the monitored folder. The program refuses a folder that contains them.
