@@ -13,14 +13,12 @@ import my.fim_security_suite.model.FileRecord;
 import my.fim_security_suite.model.LogEntry;
 
 /**
- * CoreTest - plain Java tests (no JUnit) for the parts IntegrityCheckerTest
- * doesn't cover: HashUtil, saving/loading the baseline, the log line format
- * and the ignore pattern in FileScanner.
+ * CoreTest - normal Java tests (no JUnit) for what IntegrityCheckerTest
+ * leaves out: HashUtil, saving and loading the baseline, the log line
+ * format and the ignore pattern of FileScanner.
  *
- * Just run this file. It prints PASS/FAIL for each check and a total at the end.
- * Temp files are deleted when it exits.
- *
- * Owner: Mixo Rikhotso
+ * Just run the file. It prints PASS or FAIL for every check and a total
+ * at the end. The temp files are deleted when it finishes.
  */
 public class CoreTest {
 
@@ -28,7 +26,7 @@ public class CoreTest {
     private static int failed = 0;
 
     public static void main(String[] args) {
-        // each test is in its own try so one crash doesn't stop the rest
+        // every test has its own try so one crash doesn't stop the others
         try {
             testHashOfAbc();
         } catch (Exception e) {
@@ -55,8 +53,8 @@ public class CoreTest {
     }
 
     /**
-     * The SHA-256 of "abc" is a published test value, so if we get the same
-     * answer our hashing is correct and not just consistent with itself.
+     * The SHA-256 of "abc" is a known test value, so if we get the same
+     * answer then our hashing is really correct and not only consistent.
      */
     private static void testHashOfAbc() throws Exception {
         Path dir = Files.createTempDirectory("fim_core_hash");
@@ -69,9 +67,9 @@ public class CoreTest {
         check("sha256 of abc", expected.equals(HashUtil.sha256(file)));
     }
 
-    /** Save a baseline, load it back, and make sure nothing got lost. */
+    /** Saves a baseline, loads it again and checks that nothing got lost. */
     private static void testSaveAndLoadRoundTrip() throws Exception {
-        // monitored folder and baseline file kept apart, same as in the real program
+        // the monitored folder and the baseline file are kept apart, like in the real program
         Path folder = Files.createTempDirectory("fim_core_folder");
         Path dataDir = Files.createTempDirectory("fim_core_data");
         folder.toFile().deleteOnExit();
@@ -105,7 +103,7 @@ public class CoreTest {
         check("round trip: hashes", sameHashes);
     }
 
-    /** toLine() then fromLine() should give back the same entry. */
+    /** toLine() followed by fromLine() must give the same entry back. */
     private static void testLogLineRoundTrip() {
         LocalDateTime time = LocalDateTime.of(2026, 10, 18, 19, 57, 54);
         LogEntry original = new LogEntry(time, "MODIFIED", "text.txt");
@@ -117,7 +115,7 @@ public class CoreTest {
         check("log line: message", copy.getMessage().equals("text.txt"));
     }
 
-    /** A scanner made with an ignore pattern should leave out .tmp files. */
+    /** A scanner with an ignore pattern should skip the .tmp files. */
     private static void testScannerIgnoresTmp() throws Exception {
         Path folder = Files.createTempDirectory("fim_core_scan");
         folder.toFile().deleteOnExit();

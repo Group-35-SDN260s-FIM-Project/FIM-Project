@@ -40,17 +40,18 @@ import my.fim_security_suite.model.LogEntry;
 import my.fim_security_suite.model.ScanResult;
 
 /**
- * Main window of the FIM Security Suite.
- * The layout was made in the NetBeans Design tab (MainDashBoard.form).
- * The colours, fonts and button behaviour are written by hand below.
+ * The main window of the FIM Security Suite.
+ * The layout comes from the NetBeans Design tab (MainDashBoard.form),
+ * the colours, fonts and what the buttons do are written by hand below.
  */
 public class MainDashBoard extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainDashBoard.class.getName());
 
-    // Everything below is written by hand. The designer only places the
-    // components. Colours, behaviour and the two scrolling lists are done
-    // here, and like the console menu this window only talks to FIMController.
+    // Everything below is written by hand. The designer only puts the
+    // components in place. The colours, the behaviour and the two scrolling
+    // lists are done here, and like the console menu this window only
+    // talks to FIMController.
 
     // colours
     private static final Color BODY = new Color(14, 14, 16);
@@ -63,43 +64,43 @@ public class MainDashBoard extends javax.swing.JFrame {
     private static final Color LINE = new Color(64, 78, 102);
 
     private static final int ROW_HEIGHT = 24;
-    // true: newest line at the top. false: like a normal log, newest at the bottom and scrolled down.
+    // true = newest line at the top. false = like a normal log, newest at the bottom and scrolled down
     private static final boolean NEWEST_FIRST = false;
-    private static final int LOG_LIMIT = 500;   // newest log entries loaded into the list
+    private static final int LOG_LIMIT = 500;   // how many of the newest log entries go in the list
     private static final DateTimeFormatter TIME = DateTimeFormatter.ofPattern("dd MMM HH:mm:ss");
 
-    // Recent activity only shows what happened since the program was started.
-    // The log file keeps the full history, but every new run begins with a blank list.
+    // Recent activity only shows what happened since the program started.
+    // The log file keeps everything, but each run starts with an empty list.
     private static final LocalDateTime SESSION_START = LocalDateTime.ofInstant(
             Instant.ofEpochMilli(java.lang.management.ManagementFactory.getRuntimeMXBean().getStartTime()),
             ZoneId.systemDefault()).withNano(0);
 
     private final FIMController controller;
 
-    // true while the changed files list shows a real check result (not a hint message)
+    // true while the changed files list shows a real check result and not a hint
     private boolean showingResults = false;
 
-    // the two scrolling lists: rows get added to these panels
+    // the two scrolling lists, the rows are added to these panels
     private final ListPanel changedRows = new ListPanel();
     private final ListPanel activityRows = new ListPanel();
 
-    /** Standalone start (Run File on this class): makes its own controller. */
+    /** Start on its own (Run File on this class): makes its own controller. */
     public MainDashBoard() {
         this(new FIMController());
     }
 
-    /** Start from FIM_Security_Suite or the console menu: shares the controller. */
+    /** Start from FIM_Security_Suite or the console menu: uses the same controller. */
     public MainDashBoard(FIMController controller) {
         this.controller = controller;
-        initComponents();   // the layout the designer built
-        applyStyle();       // colours, fonts, borders, scroll panes
+        initComponents();   // the layout from the designer
+        applyStyle();       // colours, fonts, borders and scroll panes
         setLocationRelativeTo(null);
 
         showMessage("Choose a folder to start");
         refreshView();
     }
 
-    /** Colours, fonts and borders for the components the designer placed. */
+    /** Colours, fonts and borders for the components from the designer. */
     private void applyStyle() {
         setTitle("FIM Security Suite");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -115,7 +116,7 @@ public class MainDashBoard extends javax.swing.JFrame {
         styleLabel(suiteLabel, Color.WHITE, new Font("Segoe UI", Font.BOLD, 22));
         styleLabel(groupLabel, LIGHT, new Font("Segoe UI", Font.PLAIN, 14));
 
-        // folder / baseline info: two rows, a fixed-width name on the left and the value filling the rest
+        // folder and baseline info: two rows, the name on the left has a fixed width and the value takes the rest
         infoPanel.setBackground(DARK_PANEL);
         infoPanel.setBorder(BorderFactory.createEmptyBorder(14, 22, 14, 22));
         folderRow.setOpaque(false);
@@ -127,21 +128,21 @@ public class MainDashBoard extends javax.swing.JFrame {
         styleLabel(folderValueLabel, Color.WHITE, new Font("Segoe UI", Font.PLAIN, 12));
         styleLabel(baselineValueLabel, Color.WHITE, new Font("Segoe UI", Font.PLAIN, 12));
 
-        // middle part: buttons, legend, the two cards
+        // middle: buttons, legend and the two cards
         bodyPanel.setBackground(BODY);
         bodyPanel.setBorder(BorderFactory.createEmptyBorder(16, 22, 12, 22));
         controlsPanel.setOpaque(false);
-        // the designer's FlowLayout rows start 14 px in; pull them back so they line up with the cards
+        // the designer's FlowLayout rows start 14 px in, so pull them back to line up with the cards
         controlsPanel.setBorder(BorderFactory.createEmptyBorder(0, -14, 0, 0));
         buttonRow.setOpaque(false);
         legendRow.setOpaque(false);
-        legendRow.setBorder(BorderFactory.createEmptyBorder(8, 0, 0, 0));   // small space under the buttons
+        legendRow.setBorder(BorderFactory.createEmptyBorder(8, 0, 0, 0));   // a bit of space under the buttons
         cardsPanel.setOpaque(false);
         styleButton(selectFolderButton);
         styleButton(createBaselineButton);
         styleButton(runCheckButton);
 
-        // legend: coloured dot icon + text, the text also shows the counts after a check
+        // legend: a coloured dot and text, the text shows the counts after a check
         styleLegend(unchangedLabel, FileStatus.UNCHANGED);
         styleLegend(modifiedLabel, FileStatus.MODIFIED);
         styleLegend(newLabel, FileStatus.NEW);
@@ -150,7 +151,7 @@ public class MainDashBoard extends javax.swing.JFrame {
         styleCard(changedCard, changedTitle, "CHANGED FILES");
         styleCard(activityCard, activityTitle, "RECENT ACTIVITY");
 
-        // grey column titles stay in place while the changed files rows scroll underneath
+        // the grey column titles stay put while the rows scroll under them
         JPanel headings = new JPanel(new GridLayout(1, 4, 12, 0));
         headings.setBackground(PANEL);
         headings.setBorder(BorderFactory.createCompoundBorder(
@@ -165,7 +166,7 @@ public class MainDashBoard extends javax.swing.JFrame {
         changedScroll.getColumnHeader().setBackground(PANEL);
         styleScroll(activityScroll, activityRows);
 
-        // set the gaps here too, in case the form gets regenerated without them
+        // gaps are set here as well in case the form gets regenerated without them
         gaps(titlePanel, 10, 0);
         gaps(infoPanel, 0, 6);
         gaps(folderRow, 10, 0);
@@ -184,7 +185,7 @@ public class MainDashBoard extends javax.swing.JFrame {
         styleLabel(statusLabel, LIGHT, new Font("Segoe UI", Font.PLAIN, 12));
     }
 
-    /** Sets the gaps of a panel, works for Border, Grid and Flow layouts. */
+    /** Sets the gaps of a panel, works with Border, Grid and Flow layouts. */
     private static void gaps(JPanel panel, int h, int v) {
         java.awt.LayoutManager lm = panel.getLayout();
         if (lm instanceof BorderLayout) {
@@ -201,7 +202,7 @@ public class MainDashBoard extends javax.swing.JFrame {
         label.setFont(font);
     }
 
-    /** Flat teal button; works the same whatever look and feel Java picks. */
+    /** Flat teal button, looks the same with any look and feel. */
     private static void styleButton(JButton button) {
         button.setFont(new Font("Segoe UI", Font.BOLD, 13));
         button.setForeground(Color.WHITE);
@@ -213,7 +214,7 @@ public class MainDashBoard extends javax.swing.JFrame {
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
-    /** Coloured dot (a small drawn icon) in front of the legend text. */
+    /** Coloured dot (a small drawn icon) before the legend text. */
     private static void styleLegend(JLabel label, FileStatus status) {
         label.setIcon(new DotIcon(colorFor(status)));
         label.setIconTextGap(7);
@@ -222,7 +223,7 @@ public class MainDashBoard extends javax.swing.JFrame {
         label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 14));
     }
 
-    /** A dark box with a small grey title. */
+    /** Dark box with a small grey title. */
     private static void styleCard(JPanel card, JLabel title, String text) {
         card.setBackground(PANEL);
         card.setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 12));
@@ -230,7 +231,7 @@ public class MainDashBoard extends javax.swing.JFrame {
         styleLabel(title, GREY, new Font("Segoe UI", Font.PLAIN, 12));
     }
 
-    /** Puts the rows panel into the designer's scroll pane: no border, dark scrollbar. */
+    /** Puts the rows panel in the designer's scroll pane: no border and a dark scrollbar. */
     private static void styleScroll(JScrollPane scroll, ListPanel rows) {
         scroll.setViewportView(rows);
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -256,7 +257,7 @@ public class MainDashBoard extends javax.swing.JFrame {
         }
         try {
             controller.selectFolder(chooser.getSelectedFile().toPath());
-            showMessage("Folder selected. Create a baseline next.");   // result belonged to the old folder
+            showMessage("Folder selected. Create a baseline next.");   // that result was for the old folder
             statusLabel.setText("Folder selected");
             refreshView();
         } catch (RuntimeException ex) {
@@ -267,7 +268,7 @@ public class MainDashBoard extends javax.swing.JFrame {
     private void onCreateBaseline() {
         try {
             Baseline baseline = controller.createBaseline();
-            // only replace the hint text; a result from an earlier check stays on screen
+            // only change the hint text, a result from an earlier check stays on screen
             if (!showingResults) {
                 showMessage("Baseline saved (" + baseline.size() + " files). Run a check to compare.");
             }
@@ -289,21 +290,21 @@ public class MainDashBoard extends javax.swing.JFrame {
 
     // ---- updating the screen ----
 
-    /** Re-reads the controller: folder, baseline, which buttons work, activity list. */
+    /** Reads the controller again: folder, baseline, which buttons work and the activity list. */
     private void refreshView() {
         Path folder = controller.getSelectedFolder();
         folderValueLabel.setText(folder == null ? "(none chosen yet)" : folder.toString());
 
-        // this run's log entries (the logger gives them oldest first)
+        // log entries of this run (the logger gives them oldest first)
         List<LogEntry> entries = new ArrayList<>();
         for (LogEntry entry : controller.getRecentLog(LOG_LIMIT)) {
-            if (!entry.getTimestamp().isBefore(SESSION_START)) {   // skip earlier runs
+            if (!entry.getTimestamp().isBefore(SESSION_START)) {   // skip older runs
                 entries.add(entry);
             }
         }
 
-        // The baseline file stays on disk between runs, so "file exists" isn't enough.
-        // Like the activity list, only a baseline made during this run counts.
+        // The baseline file stays on disk between runs so "file exists" is not enough.
+        // Same as the activity list, only a baseline made in this run counts.
         boolean baselineThisRun = false;
         for (LogEntry entry : entries) {
             if ("BASELINE".equals(entry.getAction())) {
@@ -312,11 +313,11 @@ public class MainDashBoard extends javax.swing.JFrame {
         }
         baselineValueLabel.setText(baselineThisRun && controller.hasBaseline() ? "saved" : "none");
 
-        // a button only works when its step is possible
+        // a button only works when that step is possible
         setButtonEnabled(createBaselineButton, folder != null);
         setButtonEnabled(runCheckButton, folder != null && baselineThisRun && controller.hasBaseline());
 
-        // order depends on NEWEST_FIRST (the logger gives the entries oldest first)
+        // the order depends on NEWEST_FIRST (the logger gives the entries oldest first)
         activityRows.removeAll();
         if (entries.isEmpty()) {
             activityRows.add(messageRow("(nothing yet this session)"));
@@ -330,15 +331,15 @@ public class MainDashBoard extends javax.swing.JFrame {
                 activityRows.add(activityRow(entry));
             }
         }
-        // newest at the top: stay at the top. newest at the bottom: follow it down.
+        // newest at the top: stay at the top. newest at the bottom: scroll down with it.
         finishList(activityRows, activityScroll, !NEWEST_FIRST);
     }
 
-    /** Fills the list with one row per changed file and the legend with the counts. */
+    /** Fills the list with a row for each changed file and puts the counts in the legend. */
     private void showResult(ScanResult result) {
         List<FileChange> changed = new ArrayList<>();
         for (FileChange c : result.getChanges()) {
-            if (c.getStatus() != FileStatus.UNCHANGED) {   // same as the CLI, only list changes
+            if (c.getStatus() != FileStatus.UNCHANGED) {   // same as the CLI, only the changes are listed
                 changed.add(c);
             }
         }
@@ -364,7 +365,7 @@ public class MainDashBoard extends javax.swing.JFrame {
                 : "Check complete: " + changed.size() + " file(s) changed");
     }
 
-    /** One message in the list (before any check) and the legend goes back to plain names. */
+    /** Shows one message in the list (before any check) and the legend goes back to plain names. */
     private void showMessage(String message) {
         unchangedLabel.setText("Unchanged");
         modifiedLabel.setText("Modified");
@@ -377,7 +378,7 @@ public class MainDashBoard extends javax.swing.JFrame {
         finishList(changedRows, changedScroll, false);
     }
 
-    /** Redraws a list after its rows changed, then jumps to the top or to the last row. */
+    /** Redraws a list after its rows changed and then jumps to the top or the last row. */
     private static void finishList(ListPanel rows, JScrollPane scroll, boolean toBottom) {
         rows.revalidate();
         rows.repaint();
@@ -389,7 +390,7 @@ public class MainDashBoard extends javax.swing.JFrame {
 
     // ---- rows ----
 
-    /** One row of the changed files table: status, file, old hash, new hash. */
+    /** One row of the changed files table: status, file, old hash and new hash. */
     private static JPanel changedRow(String status, String file, String oldHash, String newHash,
                                      Color statusColor) {
         JPanel row = new JPanel(new GridLayout(1, 4, 12, 0));
@@ -401,7 +402,7 @@ public class MainDashBoard extends javax.swing.JFrame {
         return fixedHeight(row);
     }
 
-    /** One line of the activity list: time, coloured action, message. */
+    /** One line of the activity list: time, coloured action and message. */
     private static JPanel activityRow(LogEntry entry) {
         Font mono = new Font(Font.MONOSPACED, Font.PLAIN, 13);
         JLabel time = cell(TIME.format(entry.getTimestamp()), GREY, mono);
@@ -436,7 +437,7 @@ public class MainDashBoard extends javax.swing.JFrame {
         return label;
     }
 
-    /** Keeps every row the same height so rows don't stretch when there are only a few. */
+    /** Gives every row the same height so they don't stretch when there are only a few. */
     private static JPanel fixedHeight(JPanel row) {
         row.setPreferredSize(new Dimension(10, ROW_HEIGHT));
         row.setMinimumSize(new Dimension(10, ROW_HEIGHT));
@@ -444,7 +445,7 @@ public class MainDashBoard extends javax.swing.JFrame {
         return row;
     }
 
-    /** First 8 characters of a hash, or "-" when there isn't one (new / missing files). */
+    /** First 8 characters of a hash, or "-" if there is none (new / missing files). */
     private static String shortHash(String hash) {
         if (hash == null) {
             return "-";
@@ -461,7 +462,7 @@ public class MainDashBoard extends javax.swing.JFrame {
         }
     }
 
-    /** The log actions that are file statuses get the same colour as in the table. */
+    /** Log actions that are file statuses get the same colour as in the table. */
     private static Color colorForAction(String action) {
         switch (action) {
             case "MODIFIED":  return colorFor(FileStatus.MODIFIED);
@@ -485,8 +486,8 @@ public class MainDashBoard extends javax.swing.JFrame {
     // ---- helper classes for the scrolling lists ----
 
     /**
-     * A panel that stacks rows from the top and follows the width of the scroll
-     * pane, so the columns stretch with the window instead of getting a sideways scrollbar.
+     * A panel that stacks the rows from the top and follows the width of the scroll
+     * pane, so the columns stretch with the window and there is no sideways scrollbar.
      */
     private static class ListPanel extends JPanel implements Scrollable {
         ListPanel() {
@@ -570,7 +571,7 @@ public class MainDashBoard extends javax.swing.JFrame {
         }
     }
 
-    /** A small filled circle used as the legend dot. */
+    /** Small filled circle for the legend dot. */
     private static class DotIcon implements Icon {
         private final Color color;
 
@@ -809,7 +810,7 @@ public class MainDashBoard extends javax.swing.JFrame {
     }//GEN-LAST:event_runCheckButtonActionPerformed
 
     public static void main(String args[]) {
-        // the normal look of the operating system (native file chooser on Windows)
+        // use the look of the operating system (gives the Windows file chooser)
         try {
             javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ex) {

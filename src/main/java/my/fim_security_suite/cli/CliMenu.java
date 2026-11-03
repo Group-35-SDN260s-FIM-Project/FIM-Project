@@ -1,9 +1,11 @@
 package my.fim_security_suite.cli;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
 import my.fim_security_suite.controller.FIMController;
+import my.fim_security_suite.demo.SandboxTool;
 import my.fim_security_suite.model.Baseline;
 import my.fim_security_suite.model.FileChange;
 import my.fim_security_suite.model.FileStatus;
@@ -12,10 +14,8 @@ import my.fim_security_suite.model.ScanResult;
 
 /**
  * Console menu for the Check-In 2 prototype.
- * It only reads input and prints results, all the actual work is done
- * by FIMController.
- *
- * @author Rebecca Mandlazi
+ * It just reads what the user types and prints results, the real work
+ * is done by FIMController.
  */
 public class CliMenu {
     private final FIMController controller;
@@ -26,7 +26,7 @@ public class CliMenu {
         this.input = new Scanner(System.in);
     }
 
-    /** Shows the menu over and over until the user picks 0. */
+    /** Keeps showing the menu until the user picks 0. */
     public void run() {
         System.out.println("=== FIM Security Suite (console version) ===");
         boolean running = true;
@@ -34,10 +34,10 @@ public class CliMenu {
             printMenu();
             String choice = readLine();
             if (choice == null) {
-                break;   // input was closed
+                break;   // input stream was closed
             }
-            // errors from the controller (wrong folder, no baseline...) are shown
-            // to the user instead of crashing the program
+            // errors from the controller (wrong folder, no baseline...) get printed
+            // for the user so the program doesn't crash
             try {
                 switch (choice.trim()) {
                     case "1": chooseFolder(); break;
@@ -45,8 +45,12 @@ public class CliMenu {
                     case "3": runCheck(); break;
                     case "4": showLog(); break;
                     case "5": openDashboard(); break;
+                    case "6": sandboxCreate(); break;
+                    case "7": sandboxTamper(); break;
+                    case "8": sandboxReset(); break;
+                    case "9": sandboxDelete(); break;
                     case "0": running = false; break;
-                    default: System.out.println("Please choose 0 - 5.");
+                    default: System.out.println("Please choose 0 - 9.");
                 }
             } catch (IllegalArgumentException | IllegalStateException e) {
                 System.out.println("Error: " + e.getMessage());
@@ -67,6 +71,10 @@ public class CliMenu {
         System.out.println("  3. Run integrity check");
         System.out.println("  4. View recent activity log");
         System.out.println("  5. Open GUI dashboard");
+        System.out.println("  6. Sandbox: create demo folder and select it");
+        System.out.println("  7. Sandbox: tamper with the demo files");
+        System.out.println("  8. Sandbox: reset the demo files");
+        System.out.println("  9. Sandbox: delete the demo folder");
         System.out.println("  0. Exit");
         System.out.print("Choice: ");
     }
@@ -78,7 +86,7 @@ public class CliMenu {
             System.out.println("No folder entered.");
             return;
         }
-        // people often paste the path with quotes from Windows Explorer
+        // Windows Explorer pastes the path with quotes around it, so remove them
         text = text.trim().replace("\"", "");
         controller.selectFolder(Path.of(text));
         System.out.println("Now monitoring: " + controller.getSelectedFolder());
@@ -106,7 +114,7 @@ public class CliMenu {
             System.out.println();
             for (FileChange change : result.getChanges()) {
                 if (change.getStatus() == FileStatus.UNCHANGED) {
-                    continue;   // only list the files that actually changed
+                    continue;   // only show the files that changed
                 }
                 System.out.printf("  [%-8s] %s   (old: %s  new: %s)%n",
                         change.getStatus(), change.getPath(),
@@ -116,7 +124,7 @@ public class CliMenu {
         printSkipped();
     }
 
-    /** Opens the Swing dashboard on the same controller, so both views share state. */
+    /** Opens the Swing dashboard with the same controller, so both views share the same state. */
     private void openDashboard(){
         if (java.awt.GraphicsEnvironment.isHeadless()) {
             System.out.println("No display available for the GUI.");
@@ -131,6 +139,53 @@ public class CliMenu {
         System.out.println("Dashboard opened.");
     }
 
+    /** Makes the demo folder and selects it, so nobody has to type a path during the demo. */
+    private void sandboxCreate(){
+        try {
+            SandboxTool.create();
+            controller.selectFolder(SandboxTool.getSandboxFolder());
+            System.out.println("Now monitoring: " + controller.getSelectedFolder());
+            System.out.println("Next: option 2 to create a baseline.");
+        } catch (IOException e) {
+            System.out.println("Sandbox error: " + e.getMessage());
+        }
+    }
+
+    /** Changes one file, deletes one and adds one so the next check has something to find. */
+    private void sandboxTamper(){
+        try {
+            SandboxTool.tamper();
+            System.out.println("Next: option 3 to run a check.");
+        } catch (IOException e) {
+            System.out.println("Sandbox error: " + e.getMessage());
+        }
+    }
+
+    /** Puts the demo files back like they were after option 6. */
+    private void sandboxReset(){
+        try {
+            SandboxTool.reset();
+            System.out.println("Next: option 3 to run a check (it should be clean again).");
+        } catch (IOException e) {
+            System.out.println("Sandbox error: " + e.getMessage());
+        }
+    }
+
+    /** Deletes the demo folder and its backup, but asks first so it can't happen by mistake. */
+    private void sandboxDelete(){
+        System.out.print("Delete the sandbox and its backup copy? (y/n): ");
+        String answer = readLine();
+        if (answer == null || !answer.trim().equalsIgnoreCase("y")) {
+            System.out.println("Nothing deleted.");
+            return;
+        }
+        try {
+            SandboxTool.delete();
+        } catch (IOException e) {
+            System.out.println("Sandbox error: " + e.getMessage());
+        }
+    }
+
     private void showLog(){
         List<LogEntry> entries = controller.getRecentLog(10);
         System.out.println("--- Last 10 log entries ---");
@@ -142,7 +197,7 @@ public class CliMenu {
         }
     }
 
-    /** Lists files the scanner couldn't read, if there were any. */
+    /** Prints the files the scanner couldn't read, if there are any. */
     private void printSkipped(){
         List<String> skipped = controller.getSkippedFiles();
         if (!skipped.isEmpty()) {
@@ -153,7 +208,7 @@ public class CliMenu {
         }
     }
 
-    /** First 8 characters of a hash, or "-" when there isn't one (new / missing files). */
+    /** First 8 characters of a hash, or "-" if there is none (new / missing files). */
     private static String shortHash(String hash){
         if (hash == null) {
             return "-";
@@ -161,7 +216,7 @@ public class CliMenu {
         return hash.length() > 8 ? hash.substring(0, 8) + "..." : hash;
     }
 
-    /** Returns null if there is no more input instead of throwing an exception. */
+    /** Gives null when the input has ended instead of throwing an exception. */
     private String readLine(){
         return input.hasNextLine() ? input.nextLine() : null;
     }

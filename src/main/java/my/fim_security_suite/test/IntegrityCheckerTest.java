@@ -8,9 +8,9 @@ import my.fim_security_suite.model.FileStatus;
 import my.fim_security_suite.model.ScanResult;
 
 /**
- * Plain Java tests for IntegrityChecker (no JUnit needed, just run the file).
- * Each test builds a small fake baseline and scan by hand and checks the
- * unchanged / modified / new / missing counts.
+ * Normal Java tests for IntegrityChecker (no JUnit, just run the file).
+ * Each test makes a small fake baseline and scan by hand and then checks
+ * the unchanged / modified / new / missing counts.
  */
 public class IntegrityCheckerTest {
 
@@ -102,7 +102,7 @@ public class IntegrityCheckerTest {
         checkCounts("testRenameIsMissingPlusNew", result, 0, 0, 1, 1);
     }
 
-    // FileRecord and Baseline take the path as a String, not a Path
+    // FileRecord and Baseline want the path as a String and not a Path
     private static FileRecord rec(String path, String hash) {
         return new FileRecord(path, hash, 0L, 0L);
     }

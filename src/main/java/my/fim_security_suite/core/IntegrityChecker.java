@@ -8,20 +8,18 @@ import my.fim_security_suite.model.FileStatus;
 import my.fim_security_suite.model.ScanResult;
 
 /**
- * Compares a fresh scan of the folder against the saved baseline and
- * puts every file into one of the four FileStatus groups.
+ * Compares a new scan of the folder with the saved baseline and puts
+ * each file in one of the four FileStatus groups.
  *
- * It works in two passes over the maps (baseline first, then the new scan),
- * so it is O(n + m) instead of comparing every file with every other file.
- *
- * @author wahin
+ * It goes through the maps twice (baseline first, then the new scan),
+ * so it is O(n + m) and doesn't compare every file with every other file.
  */
 public class IntegrityChecker {
 
     /**
      * @param old the saved baseline
-     * @param now the current scan, path -> record (from FileScanner.scan)
-     * @return a ScanResult with one FileChange per file, sorted by path
+     * @param now the new scan, path -> record (from FileScanner.scan)
+     * @return a ScanResult with a FileChange for every file, sorted by path
      */
     public ScanResult compare(Baseline old, Map<String, FileRecord> now){
         if(old == null || now == null){
@@ -30,24 +28,24 @@ public class IntegrityChecker {
         ScanResult result = new ScanResult();
         Map<String, FileRecord> before = old.getRecords();
 
-        // pass 1: go through what we had in the baseline
+        // pass 1: look at everything that was in the baseline
         for (Map.Entry<String, FileRecord> entry : before.entrySet()) {
             String path = entry.getKey();
             String oldHash = entry.getValue().getHash();
             FileRecord current = now.get(path);
 
             if (current == null) {
-                // was in the baseline but isn't in the folder anymore
+                // it was in the baseline but is not in the folder any more
                 result.add(new FileChange(path, FileStatus.MISSING, oldHash, null));
             } else if (oldHash.equals(current.getHash())) {
                 result.add(new FileChange(path, FileStatus.UNCHANGED, oldHash, current.getHash()));
             } else {
-                // same file name, different contents
+                // same file name but the contents are different
                 result.add(new FileChange(path, FileStatus.MODIFIED, oldHash, current.getHash()));
             }
         }
 
-        // pass 2: anything in the folder that the baseline never saw is new
+        // pass 2: whatever is in the folder but not in the baseline is new
         for (Map.Entry<String, FileRecord> entry : now.entrySet()) {
             if (!before.containsKey(entry.getKey())) {
                 result.add(new FileChange(entry.getKey(), FileStatus.NEW, null, entry.getValue().getHash()));

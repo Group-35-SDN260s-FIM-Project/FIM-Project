@@ -1,13 +1,9 @@
 package my.fim_security_suite.model;
 
 /**
- * One result from an integrity check: which file, what happened to it,
- * and its hash before and after.
- * For NEW files oldHash is null and for MISSING files newHash is null.
- *
- * Implements Comparable so ScanResult can sort the changes by path.
- *
- * @author wahin
+ * One result of a check: the file, what happened to it and its hash
+ * before and after. A NEW file has no oldHash and a MISSING one has no newHash.
+ * It's Comparable so ScanResult can sort the changes by path.
  */
 public class FileChange implements Comparable<FileChange> {
     private String path;
@@ -15,7 +11,7 @@ public class FileChange implements Comparable<FileChange> {
     private String oldHash;
     private String newHash;
 
-    // order of the parameters follows the UML: path, status, oldHash, newHash
+    // parameters are in the same order as on our UML: path, status, oldHash, newHash
     public FileChange(String path, FileStatus status, String oldHash, String newHash){
         this.path = path;
         this.status = status;

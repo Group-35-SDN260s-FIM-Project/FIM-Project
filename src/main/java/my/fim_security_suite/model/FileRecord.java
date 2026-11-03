@@ -3,8 +3,8 @@ package my.fim_security_suite.model;
 import java.io.Serializable;
 
 /**
- * What we remember about one file: relative path, SHA-256 hash, size
- * and last modified time. Only the hash is used for the comparison.
+ * What we keep about one file: its relative path, SHA-256 hash, size
+ * and last modified time. Only the hash is used when comparing.
  */
 public class FileRecord implements Serializable {
 

@@ -11,14 +11,12 @@ import java.util.List;
 import my.fim_security_suite.model.LogEntry;
 
 /**
- * Writes LogEntry lines to a text file and reads the latest ones back.
+ * Writes LogEntry lines to a text file and reads the newest ones back.
  *
- * We went with a file instead of keeping a list in memory so the history
- * is still there after the program is closed.
+ * We used a file and not a list in memory so the history is still
+ * there after the program is closed.
  * The methods are synchronized because MonitorService will log from a
- * background thread later on.
- *
- * @author Lenovo
+ * background thread later.
  */
 public class ActivityLogger {
 
@@ -28,7 +26,7 @@ public class ActivityLogger {
         this.logFile = logFile;
     }
 
-    /** Adds one entry to the end of the log file (creates the file if needed). */
+    /** Adds an entry at the end of the log file (the file is made if it isn't there). */
     public synchronized void log(LogEntry entry) {
         try {
             Path parent = logFile.toAbsolutePath().getParent();
@@ -44,8 +42,8 @@ public class ActivityLogger {
     }
 
     /**
-     * Returns the last n entries, oldest first.
-     * Lines that can't be read are skipped instead of crashing the menu.
+     * Gives the last n entries, oldest first.
+     * A line that can't be read is skipped so the menu doesn't crash.
      */
     public synchronized List<LogEntry> recent(int n) {
         List<LogEntry> entries = new ArrayList<>();
@@ -63,7 +61,7 @@ public class ActivityLogger {
                 try {
                     entries.add(LogEntry.fromLine(line));
                 } catch (RuntimeException badLine) {
-                    // someone edited the log by hand, just skip that line
+                    // the log was probably edited by hand, so skip this line
                 }
             }
         } catch (IOException e) {

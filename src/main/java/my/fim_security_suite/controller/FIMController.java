@@ -17,10 +17,8 @@ import my.fim_security_suite.model.ScanResult;
 
 /**
  * Sits between the user interface and the core classes.
- * The console menu (and later the GUI) only talks to this class,
- * so swapping the interface doesn't touch any of the core code.
- *
- * @author wahin
+ * The console menu and the GUI only talk to this class, so changing
+ * the interface never touches the core code.
  */
 public class FIMController {
     private final FileScanner scanner;
@@ -28,9 +26,9 @@ public class FIMController {
     private final IntegrityChecker checker;
     private final ActivityLogger logger;
     private final Path logFile;
-    private Path selectedFolder;   // not final, it changes when the user picks a folder
+    private Path selectedFolder;   // not final because it changes when the user picks a folder
 
-    /** Uses the default baseline and log files in the folder the program runs from. */
+    /** Uses the default baseline and log files in the folder the program is run from. */
     public FIMController(){
         this(Path.of("fim_baseline.ser"), Path.of("fim_activity.log"));
     }
@@ -46,8 +44,8 @@ public class FIMController {
 
     /**
      * Sets the folder to monitor.
-     * We refuse a folder that has our own baseline or log inside it, otherwise
-     * every check would report those two files as changed.
+     * A folder that contains our own baseline or log is refused, if not
+     * every check would say those two files changed.
      */
     public void selectFolder(Path folder){
         if(folder == null){
@@ -68,7 +66,7 @@ public class FIMController {
         logger.log(new LogEntry("SELECT", "Selected folder " + clean));
     }
 
-    /** Scans the selected folder and saves it as the new baseline. */
+    /** Scans the selected folder and saves the result as the new baseline. */
     public Baseline createBaseline(){
         requireFolder();
         Baseline baseline = baselineManager.create(selectedFolder);
@@ -77,7 +75,7 @@ public class FIMController {
         return baseline;
     }
 
-    /** Scans the folder again, compares it with the baseline and logs what changed. */
+    /** Scans the folder again, compares it to the baseline and logs what changed. */
     public ScanResult runCheck(){
         requireFolder();
         if(!hasBaseline()){
@@ -102,7 +100,7 @@ public class FIMController {
 
         logger.log(new LogEntry("CHECK_RUN", summary));
 
-        // one log line per file that changed, so the log shows exactly what happened
+        // one log line for every changed file so the log shows what exactly happened
         for (FileChange change : result.getChanges()) {
             if (change.getStatus() != FileStatus.UNCHANGED) {
                 logger.log(new LogEntry(change.getStatus().name(), change.getPath()));
@@ -124,7 +122,7 @@ public class FIMController {
         return baselineManager.exists();
     }
 
-    /** Files the last scan couldn't read (locked, no permission, links...). */
+    /** Files the last scan could not read (locked, no permission, links...). */
     public List<String> getSkippedFiles(){
         return scanner.getSkipped();
     }

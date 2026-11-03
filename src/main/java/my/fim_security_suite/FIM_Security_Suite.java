@@ -4,10 +4,10 @@ import my.fim_security_suite.cli.CliMenu;
 import my.fim_security_suite.controller.FIMController;
 
 /**
- * Entry point of the File Integrity Monitor.
+ * Where the File Integrity Monitor starts.
  *
- * Starts the Swing window. Run it with the argument --cli to get the
- * console menu instead. Both use the same FIMController.
+ * It opens the Swing window. If you run it with --cli you get the console
+ * menu instead. Both of them use the same FIMController.
  */
 public class FIM_Security_Suite {
 
@@ -16,7 +16,7 @@ public class FIM_Security_Suite {
         if (args.length > 0 && args[0].equals("--cli")) {
             new CliMenu(controller).run();
         } else {
-            // Swing windows should be created on the event thread
+            // Swing windows must be made on the event thread
             java.awt.EventQueue.invokeLater(
                     () -> new my.fim_security_suite.ui.MainDashBoard(controller).setVisible(true));
         }

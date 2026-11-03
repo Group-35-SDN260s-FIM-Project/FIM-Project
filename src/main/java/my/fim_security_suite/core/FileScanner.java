@@ -7,28 +7,28 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * Walks through a folder and all its sub folders and makes a FileRecord
- * for every regular file.
- * Things we can't or shouldn't read (links, locked files) are not hashed,
- * they are listed in getSkipped() instead of stopping the scan.
+ * Goes through a folder and all its sub folders and makes a FileRecord
+ * for each normal file.
+ * What we can't or shouldn't read (links, locked files) is not hashed,
+ * it goes in getSkipped() and the scan carries on.
  */
 public class FileScanner {
 
     private final Pattern ignore;
     private final List<String> skipped = new ArrayList<>();
 
-    /** Scanner that looks at every file. */
+    /** Scanner that looks at all the files. */
     public FileScanner() {
         this(null);
     }
 
-    /** Scanner that leaves out files whose relative path matches the regex (e.g. ".*\\.tmp"). */
+    /** Scanner that skips files whose relative path matches the regex (e.g. ".*\\.tmp"). */
     public FileScanner(String ignoreRegex) {
         ignore = (ignoreRegex == null || ignoreRegex.isBlank())
                 ? null : Pattern.compile(ignoreRegex);
     }
 
-    /** Returns relative path -> FileRecord for everything under the folder. */
+    /** Gives relative path -> FileRecord for everything inside the folder. */
     public Map<String, FileRecord> scan(Path folder) {
         Objects.requireNonNull(folder, "folder");
 
@@ -46,7 +46,7 @@ public class FileScanner {
         return records;
     }
 
-    /** Goes through one directory and calls itself for every sub folder. */
+    /** Goes through one directory and calls itself again for each sub folder. */
     private void walk(Path root, Path directory,
                       Map<String, FileRecord> records) {
 
@@ -104,7 +104,7 @@ public class FileScanner {
         }
     }
 
-    /** What the last scan skipped, with the reason. */
+    /** What the last scan skipped and why. */
     public List<String> getSkipped() {
         return new ArrayList<>(skipped);
     }

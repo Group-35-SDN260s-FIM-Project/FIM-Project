@@ -13,8 +13,8 @@ import java.util.Map;
 import my.fim_security_suite.model.FileRecord;
 
 /**
- * Creates, saves and loads Baseline snapshots.
- * Uses FileScanner to read a folder and Java serialization to store the result.
+ * Makes, saves and loads Baseline snapshots.
+ * It uses FileScanner to read the folder and Java serialization to store it.
  */
 public class BaselineManager {
 
@@ -26,13 +26,13 @@ public class BaselineManager {
         this.storeFile = storeFile;
     }
 
-    /** Scans the folder and builds a new Baseline (does not save it). */
+    /** Scans the folder and builds a new Baseline (it is not saved yet). */
     public Baseline create(Path folder) {
         Map<String, FileRecord> records = scanner.scan(folder);
         return new Baseline(folder.toString(), LocalDateTime.now(), records);
     }
 
-    /** Saves the baseline to the store file. */
+    /** Saves the baseline in the store file. */
     public void save(Baseline baseline) {
         try {
             Path parent = storeFile.toAbsolutePath().getParent();
@@ -47,12 +47,12 @@ public class BaselineManager {
         }
     }
 
-    /** Loads the baseline from the default store file. */
+    /** Loads the baseline from the normal store file. */
     public Baseline load() {
         return load(storeFile);
     }
 
-    /** Loads a baseline from the given file. */
+    /** Loads a baseline from the file we give it. */
     public Baseline load(Path file) {
         if (!Files.exists(file)) {
             throw new IllegalStateException("No baseline found at " + file);
@@ -66,7 +66,7 @@ public class BaselineManager {
         }
     }
 
-    /** True if a saved baseline exists. */
+    /** True if there is a saved baseline. */
     public boolean exists() {
         return Files.exists(storeFile);
     }

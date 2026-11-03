@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A saved snapshot of a folder: where it was, when we took it and the
- * record (hash, size, date) of every file in it.
- * Serializable so BaselineManager can write it to disk.
+ * A snapshot of a folder: which folder it was, when we took it and the
+ * record (hash, size, date) of each file inside.
+ * It is Serializable so BaselineManager can save it to disk.
  */
 public class Baseline implements Serializable {
 
@@ -21,7 +21,7 @@ public class Baseline implements Serializable {
     public Baseline(String folder, LocalDateTime createdAt, Map<String, FileRecord> records) {
         this.folder = folder;
         this.createdAt = createdAt;
-        // copy the map so changing the original later can't change the baseline
+        // copy the map so changing the original later doesn't change the baseline
         this.records = new HashMap<>(records);
     }
 
