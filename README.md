@@ -24,7 +24,6 @@ Silent changes to files (malware, accidental edits, unauthorised tampering) are 
 
 ```bash
 git clone https://github.com/Group-35-SDN260s-FIM-Project/FIM-Project.git
-git checkout complete-project
 ```
 
 1. In NetBeans choose **File → Open Project** and select the cloned folder.
@@ -45,8 +44,8 @@ Expected demo result on the sandbox: the first check shows 4 unchanged; after `t
 
 | Branch | Contents |
 | --- | --- |
-| `complete-project` | Final submitted version: Swing GUI, console menu, core logic, sandbox tool and tests |
-| `main` | Earlier Maven project with the first Swing GUI |
+| `main` | Final submitted version: Swing GUI, console menu, core logic, sandbox tool and tests |
+| `complete-project` | Branch where the final version was built and integrated (same code as `main`) |
 
 ## Design overview
 
