@@ -1,0 +1,77 @@
+package my.fim_security_suite.core;
+
+import my.fim_security_suite.model.Baseline;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.util.Map;
+import my.fim_security_suite.model.FileRecord;
+
+/**
+ * Makes, saves and loads Baseline snapshots.
+ * It uses FileScanner to read the folder and Java serialization to store it.
+ */
+public class BaselineManager {
+
+    private FileScanner scanner;
+    private Path storeFile;
+
+    public BaselineManager(FileScanner scanner, Path storeFile) {
+        this.scanner = scanner;
+        this.storeFile = storeFile;
+    }
+
+    /** Scans the folder and builds a new Baseline (it is not saved yet). */
+    public Baseline create(Path folder) {
+        Map<String, FileRecord> records = scanner.scan(folder);
+        return new Baseline(folder.toString(), LocalDateTime.now(), records);
+    }
+
+    /** Saves the baseline in the store file. */
+    public void save(Baseline baseline) {
+        try {
+            Path parent = storeFile.toAbsolutePath().getParent();
+            if (parent != null) {
+                Files.createDirectories(parent);
+            }
+            try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(storeFile))) {
+                out.writeObject(baseline);
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException("Could not save baseline to " + storeFile, e);
+        }
+    }
+
+    /** Loads the baseline from the normal store file. */
+    public Baseline load() {
+        return load(storeFile);
+    }
+
+    /** Loads a baseline from the file we give it. */
+    public Baseline load(Path file) {
+        if (!Files.exists(file)) {
+            throw new IllegalStateException("No baseline found at " + file);
+        }
+        try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(file))) {
+            return (Baseline) in.readObject();
+        } catch (IOException e) {
+            throw new UncheckedIOException("Could not read baseline from " + file, e);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("Baseline file is corrupt or from another version", e);
+        }
+    }
+
+    /** True if there is a saved baseline. */
+    public boolean exists() {
+        return Files.exists(storeFile);
+    }
+
+    public Path getStoreFile() {
+        return storeFile;
+    }
+}
