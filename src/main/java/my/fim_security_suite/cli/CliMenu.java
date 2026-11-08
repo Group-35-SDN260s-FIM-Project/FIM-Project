@@ -26,6 +26,14 @@ public class CliMenu {
         this.input = new Scanner(System.in);
     }
 
+    /**
+     * Lets you run the console version straight from this file
+     * (right click, Run File in NetBeans) without the --cli argument.
+     */
+    public static void main(String[] args) {
+        new CliMenu(new FIMController()).run();
+    }
+
     /** Keeps showing the menu until the user picks 0. */
     public void run() {
         System.out.println("=== FIM Security Suite (console version) ===");
